@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nti6/features/home/cubit/home_cubit.dart';
-import 'package:nti6/features/home/home_screen.dart';
+import 'package:nti6/features/itemsList/cubit/items_cubit.dart';
+import 'package:nti6/features/itemsList/items_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BlocProvider(create: (context) => HomeCubit(), child: HomeScreen()),
+      home: BlocProvider(
+        create: (context) => ItemsCubit(),
+        child: ItemsScreen(),
+      ),
     );
   }
 }
