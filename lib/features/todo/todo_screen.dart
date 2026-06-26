@@ -32,62 +32,83 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlocBuilder<TodoCubit, TodoSatates>(
-            builder: (context, state) {
-              final myCubit = context.read<TodoCubit>();
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.todos.length,
-                      itemBuilder: (context, index) {
-                        return TodoWidget(
-                          text: state.todos[index],
-                          onDelete: () {
-                            myCubit.deleteTodo(index);
-                          },
-                        );
-                      },
+        child: BlocListener<TodoCubit, TodoSatates>(
+          listener: (context, state) {
+            if (state is AddTodoState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Todo added successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+
+            if (state is DeleteTodoState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Todo delete successfully'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: BlocBuilder<TodoCubit, TodoSatates>(
+              builder: (context, state) {
+                final myCubit = context.read<TodoCubit>();
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: state.todos.length,
+                        itemBuilder: (context, index) {
+                          return TodoWidget(
+                            text: state.todos[index],
+                            onDelete: () {
+                              myCubit.deleteTodo(index);
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: todoController,
-                          decoration: InputDecoration(
-                            fillColor: Colors.grey.withValues(alpha: 0.4),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
+                    Spacer(),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: todoController,
+                            decoration: InputDecoration(
+                              fillColor: Colors.grey.withValues(alpha: 0.4),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          myCubit.addTodo(todoController.text);
-                          todoController.clear();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(50, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            myCubit.addTodo(todoController.text);
+                            todoController.clear();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(50, 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
                           ),
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
+                          child: Text('Add'),
                         ),
-                        child: Text('Add'),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
