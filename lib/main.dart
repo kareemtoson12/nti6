@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nti6/features/login/cubit/login_cubit.dart';
 import 'package:nti6/features/login/login_screen.dart';
 import 'package:nti6/features/login/models/person_model.dart';
 
@@ -16,6 +18,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen());
+    return MaterialApp(
+      home: BlocProvider(
+        create: (context) => LoginCubit(),
+        child: LoginScreen(),
+      ),
+    );
   }
 }
